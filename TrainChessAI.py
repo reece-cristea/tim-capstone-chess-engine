@@ -76,8 +76,13 @@ class chessAiTrainer():
         return True
 
     def save_to_file(self, filename):
+        directory = os.path.join('data')
+        if not os.path.exists(directory):
+            os.makedirs(directory)
         meta = np.array([self.rows], dtype=int)
-        np.savez_compressed(os.path.join('data\\', filename), X=self.X[:self.rows, :], Y=self.Y[:self.rows, :], meta=meta)
+        np.savez_compressed(os.path.join(directory, filename), X=self.X[:self.rows, :], Y=self.Y[:self.rows, :], meta=meta)
+
+
 
 def parse_training_set(directory, training_set, save_path):
     for filename in os.listdir(directory):
@@ -85,6 +90,7 @@ def parse_training_set(directory, training_set, save_path):
             filepath = os.path.join(directory, filename)
             if parse_games(training_set, filepath):
                 training_set.save_to_file(save_path)
+                
 
 def parse_games(training_set, filename):
     with open(filename) as pgn:

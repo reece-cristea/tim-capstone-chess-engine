@@ -1,10 +1,9 @@
-# https://towardsdatascience.com/train-your-own-chess-ai-66b9ca8d71e4
 import keras
 from keras.models import Sequential
 from keras.layers import Dense, Activation
 
 def create_model():
-    input_shape = (6*8*8,)
+    input_shape = (8 * 8 * 6,)
     model = Sequential()
     # Input layer
     model.add(Dense(3000, input_shape=input_shape, activation='relu')) 
@@ -53,8 +52,8 @@ def load_model(filename):
     else: # assume local filename root only
         json_filename = 'model/' + filename + '.json'
         h5_filename = 'model/' + filename + '.h5'
-    json_filename.replace('\\', '/')
-    h5_filename.replace('\\', '/')
+    json_filename.replace('\\', '/');
+    h5_filename.replace('\\', '/');
     with open(json_filename, 'r') as json_file:
         model_json = json_file.read()
         json_file.close()
