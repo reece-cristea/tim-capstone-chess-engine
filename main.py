@@ -1,6 +1,6 @@
 import chess
-from ChessAI import load_model
-from TrainChessAI import featurize_board
+from AI.ChessAI import load_model
+from AI.TrainChessAI import featurize_board
 import matplotlib.pyplot as plt
 import numpy as np
 

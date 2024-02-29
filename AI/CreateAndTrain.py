@@ -8,7 +8,7 @@ max_rows = 10000
 trainer = chessAiTrainer(max_rows)
 
 
-directory = '.' 
+directory = 'Data/' 
 save_path = 'processed_training_data.npz'
 
 
