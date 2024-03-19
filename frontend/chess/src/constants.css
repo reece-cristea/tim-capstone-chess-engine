@@ -3,6 +3,7 @@
     --light-tile: #cfac92;
     --dark-tile: #826446;
     --bg-color: #202020;
+    --legal-move: rgba(0,0,0,0.1);
 }
 
 @media all and (max-width : 450px) {
