@@ -1,6 +1,7 @@
 import React from 'react'
 import {useAppContext} from '../../contexts/context'
 import arbiter from '../../arbiter/arbiter';
+import { showLegalMoves } from '../../reducer/actions/legalMoves';
 
 const Piece = ({rank, file, piece}) => {
 
@@ -11,13 +12,13 @@ const Piece = ({rank, file, piece}) => {
   const onDragStart = e => {
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', `${piece},${rank},${7 - file}`);
-    console.log(`${piece},${rank},${7 - file}`)
     setTimeout(() => {
       e.target.style.display = 'none';
     }, 0);
     if (turn === piece[0]) {
       const legalMoves = arbiter.getRegularMoves(currentPosition, piece, rank, file);
       console.log(legalMoves);
+      dispatch(showLegalMoves(legalMoves));
     }
   }
 
@@ -26,7 +27,7 @@ const Piece = ({rank, file, piece}) => {
   }
 
   return (
-    <div className={`piece ${piece} p-${rank}${file}`} draggable={true} onDragStart={onDragStart}/>
+    <div className={`piece ${piece} p-${rank}${file}`} draggable={true} onDragStart={onDragStart} onDragEnd={onDragEnd}/>
   )
 }
 

@@ -18,9 +18,11 @@ export const getRookMoves = (position, piece, rank, file) => {
           break
         if(position[x][y].startsWith(ai)) {
           moves.push([x,y])
+          console.log("here" + x + y)
           break
         }
         if(position[x][y].startsWith(player)) {
+          console.log("here" + x + y)
           break
         }
         moves.push([x,y])

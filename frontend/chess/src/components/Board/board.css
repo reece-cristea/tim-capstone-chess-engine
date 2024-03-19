@@ -22,3 +22,35 @@
 .tile--dark {
     background: var(--dark-tile);
 }
+
+.empty {
+    position: relative;
+}
+
+.empty:after {
+    content: '';
+    display: block;
+    position: absolute;
+    width: calc(0.5*var(--tile-size));
+    height: calc(0.5*var(--tile-size));
+    background: var(--legal-move);
+    border-radius: 50%;
+    left: 25%;
+    top: 25%;
+}
+
+.attack {
+    position: relative;
+}
+
+.attack:after {
+    content: '';
+    display: block;
+    position: absolute;
+    width: calc(var(--tile-size) - 20px);
+    height: calc(var(--tile-size) - 20px);
+    border-radius: 50%;
+    left: 0;
+    top: 0;
+    border: 10px solid var(--legal-move);
+}
