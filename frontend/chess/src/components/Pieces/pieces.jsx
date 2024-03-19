@@ -18,8 +18,6 @@ const Pieces = () => {
         const size = width / 8;
         const y = Math.floor((e.clientX - left) / size)
         const x = 7 - Math.floor((e.clientY - top) / size)
-        console.log(x)
-        console.log(y)
         return { x, y }
     }
 

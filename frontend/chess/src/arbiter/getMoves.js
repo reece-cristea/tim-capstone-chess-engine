@@ -30,3 +30,32 @@ export const getRookMoves = (position, piece, rank, file) => {
     })
     return moves;
   }
+
+export const getKnightMoves = (position, rank, file) => {
+  const moves = []
+  const ai = position[rank][file].startsWith('w') ? 'b' : 'w';
+
+  const legalSquares = [
+    [-2, 1],
+    [2, 1],
+    [-2, -1],
+    [2, -1],
+    [1, 2],
+    [1, -2],
+    [-1, 2],
+    [-1, -2]
+  ]
+
+  legalSquares.forEach(sq => {
+    console.log(rank)
+    console.log(file)
+    console.log(sq[0])
+    console.log(sq[1])
+    const square = position?.[rank + sq[0]]?.[file + sq[1]];
+    if (square !== undefined && (square.startsWith(ai) || square === '')) {
+      moves.push([rank + sq[0], file + sq[1]]);
+    }
+  })
+
+  return moves
+}
