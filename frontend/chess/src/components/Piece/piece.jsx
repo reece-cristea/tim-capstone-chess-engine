@@ -1,42 +1,12 @@
 import React from 'react'
 import {useAppContext} from '../../contexts/context'
+import arbiter from '../../arbiter/arbiter';
 
 const Piece = ({rank, file, piece}) => {
 
   const {appState, dispatch} = useAppContext();
   const {turn, position} = appState;
   const currentPosition = position[position.length - 1]
-
-  const getMoves = () => {
-    const moves = [];
-    const player = piece[0];
-    const ai = player === 'w' ? 'b' : 'w';
-
-    const direction = [
-      [-1,0],
-      [1,0],
-      [0,-1],
-      [0,1]
-    ];
-
-    direction.forEach(dir => {
-      for (let i = 1; i < 8; i++) {
-        const x = rank + (i*dir[0])
-        const y = file + (i*dir[1])
-        if(currentPosition?.[x]?.[y] === undefined) 
-          break
-        if(currentPosition[x][y].startsWith(ai)) {
-          moves.push([x,y])
-          break
-        }
-        if(currentPosition[x][y].startsWith(player)) {
-          break
-        }
-        moves.push([x,y])
-      }
-    })
-    return moves;
-  }
 
   const onDragStart = e => {
     e.dataTransfer.effectAllowed = 'move';
@@ -46,7 +16,7 @@ const Piece = ({rank, file, piece}) => {
       e.target.style.display = 'none';
     }, 0);
     if (turn === piece[0]) {
-      const legalMoves = getMoves();
+      const legalMoves = arbiter.getRegularMoves(currentPosition, piece, rank, file);
       console.log(legalMoves);
     }
   }
