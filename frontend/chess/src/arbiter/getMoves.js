@@ -151,3 +151,30 @@ export const getKingMoves = (position, piece, rank, file) => {
   })
   return moves;
 }
+
+export const getPawnMoves = (position, piece, rank, file) => {
+  const moves = []
+  const direction = piece === 'wp' ? 1 : -1
+  const player = piece[0];
+  const ai = player === 'w' ? 'b' : 'w'
+
+  if (!position?.[rank + direction]?.[file]) {
+    moves.push([rank + direction,file])
+  }
+
+  if (rank % 5 === 1) {
+    if (position?.[rank + direction]?.[file] === '' && position?.[rank + direction + direction]?.[file] === '') {
+      moves.push([rank + direction + direction,file])
+    }
+  }
+
+  if (position?.[rank + direction]?.[file + 1].startsWith(ai)) {
+    moves.push([rank + direction,file + 1])
+  }
+
+  if (position?.[rank + direction]?.[file - 1].startsWith(ai)) {
+    moves.push([rank + direction,file - 1])
+  }
+
+  return moves
+}
