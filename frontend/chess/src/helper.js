@@ -18,7 +18,7 @@ export const createPositions = () => {
     postion[7][5] = 'bb'
     postion[7][6] = 'bn'
     postion[7][7] = 'br'
-    /*postion[1][0] = 'wp'
+    postion[1][0] = 'wp'
     postion[1][1] = 'wp'
     postion[1][2] = 'wp'
     postion[1][3] = 'wp'
@@ -33,7 +33,7 @@ export const createPositions = () => {
     postion[6][4] = 'bp'
     postion[6][5] = 'bp'
     postion[6][6] = 'bp'
-    postion[6][7] = 'bp'*/
+    postion[6][7] = 'bp'
     return postion;
 }
 

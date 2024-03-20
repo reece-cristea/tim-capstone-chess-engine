@@ -17,7 +17,6 @@ const Piece = ({rank, file, piece}) => {
     }, 0);
     if (turn === piece[0]) {
       const legalMoves = arbiter.getRegularMoves(currentPosition, piece, rank, file);
-      console.log(legalMoves);
       dispatch(showLegalMoves(legalMoves));
     }
   }
