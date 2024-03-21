@@ -27,6 +27,9 @@ const Pieces = () => {
         const [piece, rank, file] = e.dataTransfer.getData('text').split(',');
 
         if (appState.legalMoves?.find(sq => sq[0] === x && sq[1] === y)) {
+            if (piece.endsWith('p') && !newPosition[x][y] && x !== rank && y !== file) {
+                newPosition[rank][y] = '';
+            }
             newPosition[rank][7 - file] = "";
             newPosition[x][y] = piece;
             dispatch(makeMove({ newPosition }));

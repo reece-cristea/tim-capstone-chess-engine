@@ -1,35 +1,35 @@
 export const getRookMoves = (position, piece, rank, file) => {
-    const moves = [];
-    const player = piece[0];
-    const ai = player === 'w' ? 'b' : 'w';
+  const moves = [];
+  const player = piece[0];
+  const ai = player === 'w' ? 'b' : 'w';
 
-    const direction = [
-      [-1,0],
-      [1,0],
-      [0,-1],
-      [0,1]
-    ];
+  const direction = [
+    [-1, 0],
+    [1, 0],
+    [0, -1],
+    [0, 1]
+  ];
 
-    direction.forEach(dir => {
-      for (let i = 1; i < 8; i++) {
-        const x = rank + (i*dir[0])
-        const y = file + (i*dir[1])
-        if(position?.[x]?.[y] === undefined) 
-          break
-        if(position[x][y].startsWith(ai)) {
-          moves.push([x,y])
-          console.log("here" + x + y)
-          break
-        }
-        if(position[x][y].startsWith(player)) {
-          console.log("here" + x + y)
-          break
-        }
-        moves.push([x,y])
+  direction.forEach(dir => {
+    for (let i = 1; i < 8; i++) {
+      const x = rank + (i * dir[0])
+      const y = file + (i * dir[1])
+      if (position?.[x]?.[y] === undefined)
+        break
+      if (position[x][y].startsWith(ai)) {
+        moves.push([x, y])
+        console.log("here" + x + y)
+        break
       }
-    })
-    return moves;
-  }
+      if (position[x][y].startsWith(player)) {
+        console.log("here" + x + y)
+        break
+      }
+      moves.push([x, y])
+    }
+  })
+  return moves;
+}
 
 export const getKnightMoves = (position, rank, file) => {
   const moves = []
@@ -62,28 +62,28 @@ export const getBishopMoves = (position, piece, rank, file) => {
   const ai = player === 'w' ? 'b' : 'w';
 
   const direction = [
-    [-1,1],
-    [1,1],
-    [-1,-1],
-    [1,-1]
+    [-1, 1],
+    [1, 1],
+    [-1, -1],
+    [1, -1]
   ];
 
   direction.forEach(dir => {
     for (let i = 1; i < 8; i++) {
-      const x = rank + (i*dir[0])
-      const y = file + (i*dir[1])
-      if(position?.[x]?.[y] === undefined) 
+      const x = rank + (i * dir[0])
+      const y = file + (i * dir[1])
+      if (position?.[x]?.[y] === undefined)
         break
-      if(position[x][y].startsWith(ai)) {
-        moves.push([x,y])
+      if (position[x][y].startsWith(ai)) {
+        moves.push([x, y])
         console.log("here" + x + y)
         break
       }
-      if(position[x][y].startsWith(player)) {
+      if (position[x][y].startsWith(player)) {
         console.log("here" + x + y)
         break
       }
-      moves.push([x,y])
+      moves.push([x, y])
     }
   })
   return moves;
@@ -95,32 +95,32 @@ export const getQueenMoves = (position, piece, rank, file) => {
   const ai = player === 'w' ? 'b' : 'w';
 
   const direction = [
-    [-1,1],
-    [1,1],
-    [-1,-1],
-    [1,-1],
-    [-1,0],
-    [1,0],
-    [0,-1],
-    [0,1]
+    [-1, 1],
+    [1, 1],
+    [-1, -1],
+    [1, -1],
+    [-1, 0],
+    [1, 0],
+    [0, -1],
+    [0, 1]
   ];
 
   direction.forEach(dir => {
     for (let i = 1; i < 8; i++) {
-      const x = rank + (i*dir[0])
-      const y = file + (i*dir[1])
-      if(position?.[x]?.[y] === undefined) 
+      const x = rank + (i * dir[0])
+      const y = file + (i * dir[1])
+      if (position?.[x]?.[y] === undefined)
         break
-      if(position[x][y].startsWith(ai)) {
-        moves.push([x,y])
+      if (position[x][y].startsWith(ai)) {
+        moves.push([x, y])
         console.log("here" + x + y)
         break
       }
-      if(position[x][y].startsWith(player)) {
+      if (position[x][y].startsWith(player)) {
         console.log("here" + x + y)
         break
       }
-      moves.push([x,y])
+      moves.push([x, y])
     }
   })
   return moves;
@@ -132,49 +132,63 @@ export const getKingMoves = (position, piece, rank, file) => {
   const ai = player === 'w' ? 'b' : 'w';
 
   const direction = [
-    [-1,1],
-    [1,1],
-    [-1,-1],
-    [1,-1],
-    [-1,0],
-    [1,0],
-    [0,-1],
-    [0,1]
+    [-1, 1],
+    [1, 1],
+    [-1, -1],
+    [1, -1],
+    [-1, 0],
+    [1, 0],
+    [0, -1],
+    [0, 1]
   ];
 
   direction.forEach(dir => {
-      const x = rank + dir[0]
-      const y = file + dir[1]
-      if(position?.[x]?.[y] !== undefined && (!position[x][y].startsWith(player) || position[x][y].startsWith(ai))) {
-        moves.push([x,y])
-      }
+    const x = rank + dir[0]
+    const y = file + dir[1]
+    if (position?.[x]?.[y] !== undefined && (!position[x][y].startsWith(player) || position[x][y].startsWith(ai))) {
+      moves.push([x, y])
+    }
   })
   return moves;
 }
 
-export const getPawnMoves = (position, piece, rank, file) => {
+export const getPawnMoves = (position, previousPosition, piece, rank, file) => {
   const moves = []
   const direction = piece === 'wp' ? 1 : -1
   const player = piece[0];
   const ai = player === 'w' ? 'b' : 'w'
 
   if (!position?.[rank + direction]?.[file]) {
-    moves.push([rank + direction,file])
+    moves.push([rank + direction, file])
   }
 
   if (rank % 5 === 1) {
     if (position?.[rank + direction]?.[file] === '' && position?.[rank + direction + direction]?.[file] === '') {
-      moves.push([rank + direction + direction,file])
+      moves.push([rank + direction + direction, file])
     }
   }
 
   if (position?.[rank + direction]?.[file + 1].startsWith(ai)) {
-    moves.push([rank + direction,file + 1])
+    moves.push([rank + direction, file + 1])
   }
 
   if (position?.[rank + direction]?.[file - 1].startsWith(ai)) {
-    moves.push([rank + direction,file - 1])
+    moves.push([rank + direction, file - 1])
   }
+
+  const aiPawn = direction === 1 ? 'bp' : 'wp'
+  const adjacentFiles = [file - 1, file + 1]
+  if (previousPosition) {
+    if ((direction === 1 && rank === 4) || (direction === -1 && rank === 3)) {
+      adjacentFiles.forEach(f => {
+        if (position?.[rank]?.[f] === aiPawn && position?.[rank + direction + direction]?.[f] === '' && previousPosition?.[rank]?.[f] === '' && previousPosition?.[rank + direction + direction]?.[f] === aiPawn) {
+          moves.push([rank + direction, f]);
+        }
+      })
+
+    }
+  }
+
 
   return moves
 }
