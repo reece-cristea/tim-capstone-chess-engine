@@ -5,6 +5,9 @@ import { createPositions, copyPosition } from '../../helper'
 import { useAppContext } from '../../contexts/context'
 import { makeMove } from '../../reducer/actions/move'
 import { clearLegalMoves } from '../../reducer/actions/clearLegalMoves'
+import arbiter from '../../arbiter/arbiter'
+import { openPromotion } from '../../reducer/actions/openPromotion'
+
 
 const Pieces = () => {
 
@@ -21,18 +24,29 @@ const Pieces = () => {
         return { x, y }
     }
 
-    const onDrop = e => {
-        const newPosition = copyPosition(currentPosition);
+    const openPromotionBox = (rank, file, x, y) => {
+        dispatch(openPromotion(Number(rank), Number(file), x, y))
+    }
+
+    const move = e => {
         const { x, y } = calculateCoords(e);
         const [piece, rank, file] = e.dataTransfer.getData('text').split(',');
 
-        if (appState.legalMoves?.find(sq => sq[0] === x && sq[1] === y)) {
-            newPosition[rank][7 - file] = "";
-            newPosition[x][y] = piece;
+        if (appState.legalMoves.find(sq => sq[0] === x && sq[1] === y)) {
+            if ((piece === 'wp' && x === 7) || (piece === 'bp' && x === 0)){
+                openPromotionBox(rank, file, x, y)
+                return
+            }
+            const newPosition = arbiter.performMove(currentPosition, piece, rank, file, x, y);
             dispatch(makeMove({ newPosition }));
         }
 
         dispatch(clearLegalMoves())
+    }
+
+    const onDrop = e => {
+       e.preventDefault()
+       move(e)
     }
 
     const onDragOver = e => {

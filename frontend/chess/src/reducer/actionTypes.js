@@ -1,7 +1,9 @@
 const actionTypes = {
     "NEW_MOVE" : "NEW_MOVE",
     "SHOW_LEGAL_MOVES" : "SHOW_LEGAL_MOVES",
-    "CLEAR_LEGAL_MOVES" : "CLEAR_LEGAL_MOVES"
+    "CLEAR_LEGAL_MOVES" : "CLEAR_LEGAL_MOVES",
+    "OPEN_PROMOTION" : "OPEN_PROMOTION",
+    "CLOSE_PROMOTION" : "CLOSE_PROMOTION"
 }
 
 export default actionTypes
