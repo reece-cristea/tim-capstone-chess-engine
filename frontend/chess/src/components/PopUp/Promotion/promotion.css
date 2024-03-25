@@ -1,0 +1,38 @@
+.promotion-container {
+    width: 50%;
+    min-height: 12.5%;
+    background: var(--light-tile);
+    position: absolute;
+    border: 8px solid var(--light-tile);
+    box-shadow: 0 0 0 8px var(--dark-tile);
+}
+
+.promotion-choices {
+    height: 12.5%;
+}
+
+.promotion-choices .piece {
+    width: 25%;
+    height: 100%;
+}
+
+.promotion-choices .piece:hover {
+    box-shadow: 0 0 0 5px var(--dark-tile);
+    transform: scale(1.05);
+}
+
+.promotion-choices :is(.wq, .bq) {
+    left: 0;
+}
+
+.promotion-choices :is(.wr, .br) {
+    left: 25%;
+}
+
+.promotion-choices :is(.wb, .bb) {
+    left: 50%;
+}
+
+.promotion-choices :is(.wn, .bn) {
+    left: 75%;
+}

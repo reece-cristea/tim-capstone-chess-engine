@@ -168,11 +168,11 @@ export const getPawnMoves = (position, previousPosition, piece, rank, file) => {
     }
   }
 
-  if (position?.[rank + direction]?.[file + 1].startsWith(ai)) {
+  if (position?.[rank + direction]?.[file + 1]?.startsWith(ai)) {
     moves.push([rank + direction, file + 1])
   }
 
-  if (position?.[rank + direction]?.[file - 1].startsWith(ai)) {
+  if (position?.[rank + direction]?.[file - 1]?.startsWith(ai)) {
     moves.push([rank + direction, file - 1])
   }
 
