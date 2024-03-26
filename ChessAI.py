@@ -3,10 +3,12 @@ from keras.models import Sequential
 from keras.layers import Dense, Activation
 
 def create_model():
-    input_shape = (8 * 8 * 6,)
+    coreFeatures = 8 * 8 *6
+    bbFeatures = 13
+    completeFeatures = coreFeatures + bbFeatures
     model = Sequential()
     # Input layer
-    model.add(Dense(3000, input_shape=input_shape, activation='relu')) 
+    model.add(Dense(3000, input_shape=(491,), activation='relu')) 
     # Hidden Layers
     model.add(Dense(3000, activation='relu'))
     model.add(Dense(3000, activation='relu'))
