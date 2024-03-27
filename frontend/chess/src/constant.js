@@ -12,5 +12,9 @@ export const initGame = {
     turn : 'w',
     legalMoves : [],
     status : Status.ongoing,
-    promotionSquare : null
+    promotionSquare : null,
+    castleDirection : {
+        w: 'both',
+        b: 'both'
+    }
 }

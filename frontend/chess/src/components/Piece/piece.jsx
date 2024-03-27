@@ -6,7 +6,7 @@ import { showLegalMoves } from '../../reducer/actions/legalMoves';
 const Piece = ({rank, file, piece}) => {
 
   const {appState, dispatch} = useAppContext();
-  const {turn, position} = appState;
+  const {turn, position, castleDirection} = appState;
   const currentPosition = position[position.length - 1]
 
   const onDragStart = e => {
@@ -16,7 +16,7 @@ const Piece = ({rank, file, piece}) => {
       e.target.style.display = 'none';
     }, 0);
     if (turn === piece[0]) {
-      const legalMoves = arbiter.getRegularMoves(currentPosition, position[position.length - 2], piece, rank, file);
+      const legalMoves = arbiter.getRegularMoves(currentPosition, position[position.length - 2], castleDirection[turn], piece, rank, file);
       dispatch(showLegalMoves(legalMoves));
     }
   }

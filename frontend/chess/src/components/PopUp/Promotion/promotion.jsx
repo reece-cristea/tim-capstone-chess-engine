@@ -35,7 +35,6 @@ const Promotion = ({onClosePopUp}) => {
     const selectPromotionPiece = (option) => {
         onClosePopUp();
         const newPosition = copyPosition(appState.position[appState.position.length - 1]);
-        console.log(promotionSquare.rank + " " + promotionSquare.file);
         newPosition[promotionSquare.rank][7 - promotionSquare.file] = '';
         newPosition[promotionSquare.x][promotionSquare.y] = `${color}${option}`;
         dispatch(clearLegalMoves());

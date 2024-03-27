@@ -7,6 +7,8 @@ import { makeMove } from '../../reducer/actions/move'
 import { clearLegalMoves } from '../../reducer/actions/clearLegalMoves'
 import arbiter from '../../arbiter/arbiter'
 import { openPromotion } from '../../reducer/actions/openPromotion'
+import { updateCastling } from '../../reducer/actions/castle'
+import { getCastlingDirections } from '../../arbiter/getMoves'
 
 
 const Pieces = () => {
@@ -28,6 +30,14 @@ const Pieces = () => {
         dispatch(openPromotion(Number(rank), Number(file), x, y))
     }
 
+    const updateCastlingState = (piece, rank, file) => {
+        const direction = getCastlingDirections(appState.castleDirection,piece, Number(rank), 7 - Number(file))
+        console.log(direction);
+        if (direction) {
+            dispatch(updateCastling(direction))
+        }
+    }
+
     const move = e => {
         const { x, y } = calculateCoords(e);
         const [piece, rank, file] = e.dataTransfer.getData('text').split(',');
@@ -36,6 +46,9 @@ const Pieces = () => {
             if ((piece === 'wp' && x === 7) || (piece === 'bp' && x === 0)){
                 openPromotionBox(rank, file, x, y)
                 return
+            }
+            if (piece.endsWith('r') || piece.endsWith('k')) {
+                updateCastlingState(piece, rank, file)
             }
             const newPosition = arbiter.performMove(currentPosition, piece, rank, file, x, y);
             dispatch(makeMove({ newPosition }));
