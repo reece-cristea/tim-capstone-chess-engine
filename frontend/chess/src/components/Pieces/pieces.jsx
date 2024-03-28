@@ -32,7 +32,6 @@ const Pieces = () => {
 
     const updateCastlingState = (piece, rank, file) => {
         const direction = getCastlingDirections(appState.castleDirection,piece, Number(rank), 7 - Number(file))
-        console.log(direction);
         if (direction) {
             dispatch(updateCastling(direction))
         }

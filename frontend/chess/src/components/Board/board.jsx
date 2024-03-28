@@ -6,6 +6,8 @@ import Files from '../Files/files';
 import Pieces from '../Pieces/pieces';
 import { useAppContext } from '../../contexts/context';
 import PopUp from '../PopUp/popup';
+import arbiter from '../../arbiter/arbiter';
+import { getKingPosition } from '../../arbiter/getMoves';
 
 
 const Board = () => {
@@ -15,6 +17,17 @@ const Board = () => {
     const {appState} = useAppContext();
     const position = appState.position[appState.position.length - 1];
 
+    const isChecked = (() => {
+        const isInCheck = arbiter.isPlayerInCheck({
+            positionAfterMove: position,
+            player: appState.turn
+        })
+        if (isInCheck) {
+            return getKingPosition(position, appState.turn);
+        }
+        return null
+    })()
+
     const getTileColor = (i, j) => {
         let c = 'tile'
         c += (i + j) % 2 === 0 ? ' tile--dark ' : ' tile--light '
@@ -22,9 +35,11 @@ const Board = () => {
             if(position[i][j] === ""){
                 c += ' empty';
             } else {
-                c+= 'attack';
+                c+= ' attack';
             }
         }
+        if (isChecked && isChecked[0] === i && isChecked[1] === j)
+            c += ' checked'
         return c
     }
 

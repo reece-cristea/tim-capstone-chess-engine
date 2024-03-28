@@ -52,3 +52,7 @@
     top: 0;
     border: 10px solid var(--legal-move);
 }
+
+.checked {
+    background-color: #584027;
+}
