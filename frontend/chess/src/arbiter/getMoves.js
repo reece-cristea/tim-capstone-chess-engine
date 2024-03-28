@@ -259,3 +259,29 @@ export const getCastlingDirections = (castleDirection, piece, rank, file) => {
     }
   }
 }
+
+export const getKingPosition = (position, player) => {
+  let kingPos = ''
+  position.forEach((rank, x) => {
+    rank.forEach((file, y) => {
+      if (position[x][y].startsWith(player) && position[x][y].endsWith('k'))
+        kingPos = [x,y]
+    })
+  })
+  return kingPos
+}
+
+export const getPieces = (position, ai) => {
+  let aiPieces = []
+  position.forEach((rank, x) => {
+    rank.forEach((file, y) => {
+      if (position[x][y].startsWith(ai))
+        aiPieces.push({
+          position: [x,y],
+          file: y,
+          rank: x
+        })
+    })
+  })
+  return aiPieces
+}
