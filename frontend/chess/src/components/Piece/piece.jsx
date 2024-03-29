@@ -16,7 +16,7 @@ const Piece = ({rank, file, piece}) => {
       e.target.style.display = 'none';
     }, 0);
     if (turn === piece[0]) {
-      const legalMoves = arbiter.getValidMoves(currentPosition, castleDirection[turn], position[position.length - 2], piece, rank, file);
+      const legalMoves = arbiter.getValidMoves({position: currentPosition, castleDirection: castleDirection[turn], previousPosition: position[position.length - 2], piece, rank, file});
       dispatch(showLegalMoves(legalMoves));
     }
   }
