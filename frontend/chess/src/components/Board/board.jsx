@@ -8,6 +8,8 @@ import { useAppContext } from '../../contexts/context';
 import PopUp from '../PopUp/popup';
 import arbiter from '../../arbiter/arbiter';
 import { getKingPosition } from '../../arbiter/getMoves';
+import Promotion from '../PopUp/Promotion/promotion';
+import GameEnds from '../PopUp/GameEnds/gameEnds';
 
 
 const Board = () => {
@@ -58,7 +60,10 @@ const Board = () => {
             </div>
             
             <Pieces />
-            <PopUp />
+            <PopUp>
+                <Promotion />
+                <GameEnds />
+            </PopUp>
             
             <Files files={files} />
         </div>

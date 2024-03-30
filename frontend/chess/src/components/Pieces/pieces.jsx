@@ -55,6 +55,7 @@ const Pieces = () => {
             const newPosition = arbiter.performMove(currentPosition, piece, rank, file, x, y);
             dispatch(makeMove({ newPosition }));
             if (arbiter.isStalemate(newPosition, currentPlayer, castleDirection)) {
+                console.log("stalemate")
                 dispatch(stalemate())
             }
         }
@@ -65,6 +66,7 @@ const Pieces = () => {
     const onDrop = e => {
        e.preventDefault()
        move(e)
+       console.log(appState)
     }
 
     const onDragOver = e => {
