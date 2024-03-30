@@ -9,6 +9,7 @@ import arbiter from '../../arbiter/arbiter'
 import { openPromotion } from '../../reducer/actions/openPromotion'
 import { updateCastling } from '../../reducer/actions/castle'
 import { getCastlingDirections } from '../../arbiter/getMoves'
+import { stalemate } from '../../reducer/actions/stalemate'
 
 
 const Pieces = () => {
@@ -42,6 +43,8 @@ const Pieces = () => {
         const [piece, rank, file] = e.dataTransfer.getData('text').split(',');
 
         if (appState.legalMoves.find(sq => sq[0] === x && sq[1] === y)) {
+            const currentPlayer = piece.startsWith('w') ? 'b' : 'w';
+            const castleDirection = appState.castleDirection[`${piece.startsWith('w') ? 'b' : 'w'}`];
             if ((piece === 'wp' && x === 7) || (piece === 'bp' && x === 0)){
                 openPromotionBox(rank, file, x, y)
                 return
@@ -51,6 +54,10 @@ const Pieces = () => {
             }
             const newPosition = arbiter.performMove(currentPosition, piece, rank, file, x, y);
             dispatch(makeMove({ newPosition }));
+            if (arbiter.isStalemate(newPosition, currentPlayer, castleDirection)) {
+                console.log("stalemate")
+                dispatch(stalemate())
+            }
         }
 
         dispatch(clearLegalMoves())
@@ -59,6 +66,7 @@ const Pieces = () => {
     const onDrop = e => {
        e.preventDefault()
        move(e)
+       console.log(appState)
     }
 
     const onDragOver = e => {
