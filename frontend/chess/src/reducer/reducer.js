@@ -3,8 +3,8 @@ import actionTypes from "./actionTypes"
 
 export const reducer = (state, action) => {
     switch (action.type) {
-        case actionTypes.NEW_MOVE : {
-            let {turn, position} = state
+        case actionTypes.NEW_MOVE: {
+            let { turn, position } = state
             turn = turn === 'w' ? 'b' : 'w';
             position = [...position, action.payload.newPosition]
             return {
@@ -13,58 +13,64 @@ export const reducer = (state, action) => {
                 position
             }
         }
-        case actionTypes.SHOW_LEGAL_MOVES : {
+        case actionTypes.SHOW_LEGAL_MOVES: {
             return {
                 ...state,
                 legalMoves: action.payload
             }
         }
-        case actionTypes.CLEAR_LEGAL_MOVES : {
+        case actionTypes.CLEAR_LEGAL_MOVES: {
             return {
                 ...state,
                 legalMoves: []
             }
         }
-        case actionTypes.OPEN_PROMOTION : {
+        case actionTypes.OPEN_PROMOTION: {
             return {
                 ...state,
                 status: Status.promoting,
-                promotionSquare : {...action.payload}
+                promotionSquare: { ...action.payload }
             }
         }
-        case actionTypes.CLOSE_PROMOTION : {
+        case actionTypes.CLOSE_PROMOTION: {
             return {
                 ...state,
                 status: Status.ongoing,
-                promotionSquare : null
+                promotionSquare: null
             }
         }
-        case actionTypes.CAN_CASTLE : {
-            let {turn, castleDirection} = state
+        case actionTypes.CAN_CASTLE: {
+            let { turn, castleDirection } = state
             castleDirection[turn] = action.payload
             return {
                 ...state,
                 castleDirection
             }
         }
-        case actionTypes.STALEMATE : {
+        case actionTypes.STALEMATE: {
             return {
                 ...state,
-                status : Status.stalemate
+                status: Status.stalemate
             }
         }
-        case actionTypes.NEW_GAME : {
+        case actionTypes.NEW_GAME: {
             return {
                 ...action.payload
             }
         }
-        case actionTypes.INSUFFICIENT_MATERIALS : {
+        case actionTypes.INSUFFICIENT_MATERIALS: {
             return {
                 ...state,
-                status : Status.insufficientMaterials
+                status: Status.insufficientMaterials
             }
         }
-        default :
+        case actionTypes.CHECKMATE: {
+            return {
+                ...state,
+                status: action.payload === 'w' ? Status.white : Status.black
+            }
+        }
+        default:
             return state;
     }
 }

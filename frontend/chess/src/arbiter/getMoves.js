@@ -76,11 +76,9 @@ export const getBishopMoves = (position, piece, rank, file) => {
         break
       if (position[x][y].startsWith(ai)) {
         moves.push([x, y])
-        console.log("here" + x + y)
         break
       }
       if (position[x][y].startsWith(player)) {
-        console.log("here" + x + y)
         break
       }
       moves.push([x, y])
@@ -113,11 +111,9 @@ export const getQueenMoves = (position, piece, rank, file) => {
         break
       if (position[x][y].startsWith(ai)) {
         moves.push([x, y])
-        console.log("here" + x + y)
         break
       }
       if (position[x][y].startsWith(player)) {
-        console.log("here" + x + y)
         break
       }
       moves.push([x, y])
@@ -156,7 +152,6 @@ export const getPawnMoves = (position, piece, rank, file) => {
   const moves = []
   const direction = piece === 'wp' ? 1 : -1
   const player = piece[0];
-  const ai = player === 'w' ? 'b' : 'w'
 
   if (!position?.[rank + direction]?.[file]) {
     moves.push([rank + direction, file])
