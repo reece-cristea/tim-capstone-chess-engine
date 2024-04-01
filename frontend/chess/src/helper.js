@@ -47,3 +47,19 @@ export const copyPosition = position => {
 
     return newPostion;
 }
+
+export const areSameColorTiles = (coords1, coords2) => {
+    return (coords1.x + coords1.y % 2 === coords2.x + coords2.y % 2)
+}
+
+export const findPieceCoords = (position, piece) => {
+    let results = []
+    position.forEach ((rank, i) => {
+        rank.forEach ((pos, j) => {
+            if (pos === piece) {
+                results.push({x:i, y:j})
+            }
+        })
+    })
+    return results
+}

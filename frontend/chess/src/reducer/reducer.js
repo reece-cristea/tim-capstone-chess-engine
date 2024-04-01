@@ -58,6 +58,12 @@ export const reducer = (state, action) => {
                 ...action.payload
             }
         }
+        case actionTypes.INSUFFICIENT_MATERIALS : {
+            return {
+                ...state,
+                status : Status.insufficientMaterials
+            }
+        }
         default :
             return state;
     }

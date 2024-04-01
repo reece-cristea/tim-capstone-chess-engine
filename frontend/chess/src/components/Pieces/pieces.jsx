@@ -10,6 +10,7 @@ import { openPromotion } from '../../reducer/actions/openPromotion'
 import { updateCastling } from '../../reducer/actions/castle'
 import { getCastlingDirections } from '../../arbiter/getMoves'
 import { stalemate } from '../../reducer/actions/stalemate'
+import { detectInsufficientMaterials } from '../../reducer/actions/insufficientMaterials'
 
 
 const Pieces = () => {
@@ -55,8 +56,9 @@ const Pieces = () => {
             const newPosition = arbiter.performMove(currentPosition, piece, rank, file, x, y);
             dispatch(makeMove({ newPosition }));
             if (arbiter.isStalemate(newPosition, currentPlayer, castleDirection)) {
-                console.log("stalemate")
                 dispatch(stalemate())
+            } else if (arbiter.insufficientMaterials(newPosition)) {
+                dispatch(detectInsufficientMaterials())
             }
         }
 
@@ -66,7 +68,6 @@ const Pieces = () => {
     const onDrop = e => {
        e.preventDefault()
        move(e)
-       console.log(appState)
     }
 
     const onDragOver = e => {
