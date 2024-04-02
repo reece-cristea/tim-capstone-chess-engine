@@ -130,8 +130,25 @@ const arbiter = {
             ))
         ], [])
         return (isInCheck && moves.length === 0);
+    },
+    threefoldRepetition: function (positions, turn) {
+        const positionCounter = {}
+        positions.forEach(pos => {
+            if (positionCounter[pos]) {
+                positionCounter[pos] += 1
+            } else {
+                positionCounter[pos] = 1;
+            }
+        })
+        console.log(positionCounter)
+        for (const pos in positionCounter) {
+            if (positionCounter[pos] >= 3) {
+                return true
+            }
+        }
+        
+        return false
     }
-
 }
 
 export default arbiter

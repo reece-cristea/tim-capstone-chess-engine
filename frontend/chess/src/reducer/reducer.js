@@ -70,6 +70,12 @@ export const reducer = (state, action) => {
                 status: action.payload === 'w' ? Status.white : Status.black
             }
         }
+        case actionTypes.THREEFOLD: {
+            return {
+                ...state,
+                status: Status.threefold
+            }
+        }
         default:
             return state;
     }

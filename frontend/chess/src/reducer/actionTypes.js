@@ -8,7 +8,8 @@ const actionTypes = {
     "CLOSE_PROMOTION" : "CLOSE_PROMOTION",
     "STALEMATE" : "STALEMATE",
     "INSUFFICIENT_MATERIALS": "INSUFFICIENT_MATERIALS",
-    "CHECKMATE" : "CHECKMATE"
+    "CHECKMATE" : "CHECKMATE",
+    "THREEFOLD" : "THREEFOLD"
 }
 
 export default actionTypes

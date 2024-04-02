@@ -11,6 +11,7 @@ import { updateCastling } from '../../reducer/actions/castle'
 import { getCastlingDirections } from '../../arbiter/getMoves'
 import { stalemate } from '../../reducer/actions/stalemate'
 import { detectInsufficientMaterials } from '../../reducer/actions/insufficientMaterials'
+import { detectThreefoldRepetition } from '../../reducer/actions/threefold'
 import { checkmate } from '../../reducer/actions/checkmate'
 
 
@@ -56,6 +57,7 @@ const Pieces = () => {
             }
             const newPosition = arbiter.performMove(currentPosition, piece, rank, file, x, y);
             dispatch(makeMove({ newPosition }));
+            
             if (arbiter.isCheckmate(newPosition, currentPlayer, castleDirection)) {
                 console.log('checkmate')
                 console.log(piece[0])
@@ -64,8 +66,9 @@ const Pieces = () => {
                 dispatch(stalemate())
             } else if (arbiter.insufficientMaterials(newPosition)) {
                 dispatch(detectInsufficientMaterials())
+            } else if (arbiter.threefoldRepetition(appState.position, appState.turn)) {
+                dispatch(detectThreefoldRepetition())
             }
-            
         }
 
         dispatch(clearLegalMoves())
