@@ -1,3 +1,4 @@
+import { areSameColorTiles, findPieceCoords } from "../helper"
 import { getKnightMoves, getRookMoves, getBishopMoves, getQueenMoves, getKingMoves, getPawnMoves, getCastlingMoves, getKingPosition, getPieces, getPawnCaptures } from "./getMoves"
 import { movePawn, movePiece } from "./move"
 
@@ -92,8 +93,61 @@ const arbiter = {
             ))
         ], [])
         return (!isInCheck && moves.length === 0);
-    }
+    },
+    insufficientMaterials: function (position) {
+        const pieces = position.reduce((acc, rank) =>
+            acc = [
+                ...acc,
+                ...rank.filter(x => x)
+            ], [])
+        if (pieces.length === 2) {
+            return true
+        }
 
+        if (pieces.length === 3 && pieces.some(p => p.endsWith('b') || p.endsWith('n'))) {
+            return true
+        }
+
+        if (pieces.length === 4 && pieces.every(p => p.endsWith('b') || p.endsWith('k')) && new Set(pieces).size === 4  && areSameColorTiles(findPieceCoords(position, 'wb')[0], findPieceCoords(position, 'bb')[0])) {
+            return true
+        }
+        return false
+    },
+    isCheckmate: function (newPostion, currentPlayer, castleDirection) {
+        const isInCheck = this.isPlayerInCheck({ positionAfterMove: newPostion, player: currentPlayer });
+        if (!isInCheck) {
+            return false
+        }
+        const pieces = getPieces(newPostion, currentPlayer);
+        const moves = pieces.reduce((acc, p) => acc = [
+            ...acc,
+            ...(this.getValidMoves(
+                {
+                    position: newPostion,
+                    castleDirection,
+                    ...p
+                }
+            ))
+        ], [])
+        return (isInCheck && moves.length === 0);
+    },
+    threefoldRepetition: function (positions) {
+        const positionCounter = {}
+        positions.forEach(pos => {
+            if (positionCounter[pos]) {
+                positionCounter[pos] += 1;
+            } else {
+                positionCounter[pos] = 1;
+            }
+        })
+        for (const pos in positionCounter) {
+            if (positionCounter[pos] >= 3) {
+                return true
+            }
+        }
+        
+        return false
+    }
 }
 
 export default arbiter

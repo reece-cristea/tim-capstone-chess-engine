@@ -5,7 +5,9 @@ export const Status = {
     'promoting' : 'Promoting',
     'white' : 'White wins!',
     'black' : 'Black wins!',
-    'stalemate' : 'The game ended in a stalemate.'
+    'stalemate' : 'The game ended in a stalemate.',
+    'insufficientMaterials' : 'The game ended in a draw because there is insufficient material.',
+    'threefold' : 'The game ended in a draw due to threefold repetition.'
 }
 
 export const initGame = {
@@ -17,5 +19,6 @@ export const initGame = {
     castleDirection : {
         w: 'both',
         b: 'both'
-    }
+    },
+    capturedPieces: []
 }
