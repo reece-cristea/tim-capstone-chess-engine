@@ -19,5 +19,6 @@ export const initGame = {
     castleDirection : {
         w: 'both',
         b: 'both'
-    }
+    },
+    capturedPieces: []
 }

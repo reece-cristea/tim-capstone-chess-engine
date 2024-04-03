@@ -76,6 +76,12 @@ export const reducer = (state, action) => {
                 status: Status.threefold
             }
         }
+        case actionTypes.CAPTURE: {
+            return {
+                ...state,
+                capturedPieces: action.payload
+            }
+        }
         default:
             return state;
     }

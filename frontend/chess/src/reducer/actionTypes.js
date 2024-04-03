@@ -9,7 +9,8 @@ const actionTypes = {
     "STALEMATE" : "STALEMATE",
     "INSUFFICIENT_MATERIALS": "INSUFFICIENT_MATERIALS",
     "CHECKMATE" : "CHECKMATE",
-    "THREEFOLD" : "THREEFOLD"
+    "THREEFOLD" : "THREEFOLD",
+    "CAPTURE" : "CAPTURE"
 }
 
 export default actionTypes

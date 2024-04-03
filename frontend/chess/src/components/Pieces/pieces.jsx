@@ -13,6 +13,7 @@ import { stalemate } from '../../reducer/actions/stalemate'
 import { detectInsufficientMaterials } from '../../reducer/actions/insufficientMaterials'
 import { detectThreefoldRepetition } from '../../reducer/actions/threefold'
 import { checkmate } from '../../reducer/actions/checkmate'
+import { capturedPiece } from '../../reducer/actions/capture'
 
 
 const Pieces = () => {
@@ -45,6 +46,11 @@ const Pieces = () => {
         const { x, y } = calculateCoords(e);
         const [piece, rank, file] = e.dataTransfer.getData('text').split(',');
 
+        if (currentPosition[x][y] && !currentPosition[x][y].startsWith(piece[0])){
+            const pieces = [...appState.capturedPieces, currentPosition[x][y]]
+            dispatch(capturedPiece(pieces))
+        }
+
         if (appState.legalMoves.find(sq => sq[0] === x && sq[1] === y)) {
             const currentPlayer = piece.startsWith('w') ? 'b' : 'w';
             const castleDirection = appState.castleDirection[`${piece.startsWith('w') ? 'b' : 'w'}`];
@@ -59,14 +65,12 @@ const Pieces = () => {
             dispatch(makeMove({ newPosition }));
             
             if (arbiter.isCheckmate(newPosition, currentPlayer, castleDirection)) {
-                console.log('checkmate')
-                console.log(piece[0])
                 dispatch(checkmate(piece[0]))
             } else if (arbiter.isStalemate(newPosition, currentPlayer, castleDirection)) {
                 dispatch(stalemate())
             } else if (arbiter.insufficientMaterials(newPosition)) {
                 dispatch(detectInsufficientMaterials())
-            } else if (arbiter.threefoldRepetition(appState.position, appState.turn)) {
+            } else if (arbiter.threefoldRepetition(appState.position)) {
                 dispatch(detectThreefoldRepetition())
             }
         }
@@ -77,6 +81,7 @@ const Pieces = () => {
     const onDrop = e => {
        e.preventDefault()
        move(e)
+       console.log(appState)
     }
 
     const onDragOver = e => {
