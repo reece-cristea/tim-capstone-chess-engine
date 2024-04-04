@@ -1,0 +1,13 @@
+.captured-piece-container {
+    margin: 1rem;
+    background-color: var(--light-tile);
+    width: 100%;
+    height: calc(var(--tile-size) / 1.25);
+    display: flex;
+    flex-direction: row;
+}
+
+.captured-piece {
+    height: calc(var(--tile-size) / 2);
+    width: calc(var(--tile-size) / 2);
+}
