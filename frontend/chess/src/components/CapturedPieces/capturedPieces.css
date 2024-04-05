@@ -2,9 +2,12 @@
     margin: 1rem;
     background-color: var(--light-tile);
     width: 100%;
-    height: calc(var(--tile-size) / 1.25);
+    min-height: calc(var(--tile-size) / 1.25);
+    height: auto;
+    max-width: 100%;
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
 }
 
 .captured-piece {
