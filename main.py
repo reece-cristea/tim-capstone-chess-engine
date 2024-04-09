@@ -1,6 +1,6 @@
 import chess
-from AI.ChessAI import load_model
-from AI.TrainChessAI import featurize_board
+from ChessAI import load_model
+from TrainChessAI import featurize_board
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -24,15 +24,6 @@ def get_human_move(board):
         except ValueError:
             print("Invalid format or move. Please enter a move in algebraic notation (e.g., e2e4).")
     return move
-
-def generate_ai_move(board, model):
-    input_format = featurize_board(board.fen(), rotate=False)
-    predicted_move = model.predict(input_format).reshape((64, 64))
-    move = chess.Move.from_uci(predicted_move)
-    if move in board.legal_moves:
-        return move
-    else:
-        return next(iter(board.legal_moves))
     
 def generate_model_move(model, board, stats, show_output=False):
     assert board.turn  # Must be White's turn
