@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react'
 import Piece from '../Piece/piece'
 import './pieces.css'
-import { createPositions, copyPosition } from '../../helper'
+import { createPositions, copyPosition, getAlgebraicNotation, reverseAlgebraicNotation } from '../../helper'
 import { useAppContext } from '../../contexts/context'
 import { makeMove } from '../../reducer/actions/move'
 import { clearLegalMoves } from '../../reducer/actions/clearLegalMoves'
@@ -46,6 +46,16 @@ const Pieces = () => {
         const { x, y } = calculateCoords(e);
         const [piece, rank, file] = e.dataTransfer.getData('text').split(',');
 
+        console.log(x)
+        console.log(y)
+        console.log(rank)
+        console.log(7-file)
+
+        console.log(getAlgebraicNotation(rank, 7 - file))
+        console.log(getAlgebraicNotation(x, y))
+
+        console.log(reverseAlgebraicNotation('d2d4'))
+
         if (currentPosition[x][y] && !currentPosition[x][y].startsWith(piece[0])){
             const pieces = [...appState.capturedPieces, currentPosition[x][y]]
             dispatch(capturedPiece(pieces))
@@ -62,6 +72,12 @@ const Pieces = () => {
                 updateCastlingState(piece, rank, file)
             }
             const newPosition = arbiter.performMove(currentPosition, piece, rank, file, x, y);
+            /*fetch(`/move/${getAlgebraicNotation(rank, 7 - file)}${getAlgebraicNotation(x, y)}`).then((res) =>
+                res.json().then((data) => {
+                    //deal with ai move
+                    let coords = reverseAlgebraicNotation(data.move)
+                })
+            )*/
             dispatch(makeMove({ newPosition }));
             
             if (arbiter.isCheckmate(newPosition, currentPlayer, castleDirection)) {
@@ -81,7 +97,6 @@ const Pieces = () => {
     const onDrop = e => {
        e.preventDefault()
        move(e)
-       console.log(appState)
     }
 
     const onDragOver = e => {
