@@ -37,7 +37,7 @@ def probabilistic_move_selection(model_output, board):
 
 def add_to_training_data(board_fen, move, model_output):
     input_features = featurize_board(board_fen, rotate=False)
-    input_features = input_features.reshape(-1, 490)  # Adjust to match the updated model's input shape
+    input_features = input_features.reshape(-1, 491)  # Adjust to match the updated model's input shape
     move_index = np.ravel_multi_index((move.from_square, move.to_square), (64, 64))
     output_target = to_categorical(move_index, num_classes=4096).reshape((4096,))
     
@@ -49,7 +49,7 @@ def train_model_from_self_play(model, epochs=3, batch_size=64):
         return
     
     X, Y = zip(*training_data)
-    X = np.array(X).reshape(-1, 490)  # Adjust dimensions as needed for your model
+    X = np.array(X).reshape(-1, 491)  # Adjust dimensions as needed for your model
     Y = np.array(Y)
     
     model.fit(X, Y, epochs=epochs, batch_size=batch_size, validation_split=0.1)
@@ -57,7 +57,7 @@ def train_model_from_self_play(model, epochs=3, batch_size=64):
 
 def generate_model_move(model, board, stats, show_output=False):
     input_format = featurize_board(board.fen(), rotate=not board.turn)
-    input_format = input_format.reshape(-1, 490)  # Adjust to match the updated model's expected input shape
+    input_format = input_format.reshape(-1, 491)  # Adjust to match the updated model's expected input shape
     
     model_output = model.predict(input_format).reshape((64, 64))
     if show_output:

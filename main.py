@@ -29,7 +29,7 @@ def generate_model_move(model, board, stats, show_output=False):
     assert board.turn  # Must be White's turn
     input_format = featurize_board(board.fen(), rotate=False)
     # Reshape the input to match the model's expected input shape
-    input_format = input_format.reshape(-1, 384)  # Assuming your model expects a flat array of 384 elements
+    input_format = input_format.reshape(-1, 491)  # Assuming your model expects a flat array of 384 elements
 
     y = model.predict(input_format).reshape((64, 64))
     if show_output:
@@ -97,13 +97,14 @@ class ChessGame:
                 print("Move accepted.")
         except ValueError:
             print("Invalid format or move. Please enter a move in algebraic notation (e.g., e2e4).")
+        self.board.push(move)
         return move
     
     def generate_model_move(self, show_output=False):
-        assert self.board.turn  # Must be White's turn
+        assert not self.board.turn  # Must be White's turn
         input_format = featurize_board(self.board.fen(), rotate=False)
         # Reshape the input to match the model's expected input shape
-        input_format = input_format.reshape(-1, 384)  # Assuming your model expects a flat array of 384 elements
+        input_format = input_format.reshape(-1, 491)  # Assuming your model expects a flat array of 384 elements
 
         y = self.model.predict(input_format).reshape((64, 64))
         if show_output:
@@ -122,7 +123,8 @@ class ChessGame:
                     self.stats['en_passant_captures'] += 1
                 if self.board.is_castling(move):
                     self.stats['castles'] += 1
-                return move
+                self.board.push(move)
+                return move.uci()
             else:
                 self.stats['illegal_moves'] += 1
             y[from_square, to_square] = 0

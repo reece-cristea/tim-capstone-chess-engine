@@ -46,16 +46,6 @@ const Pieces = () => {
         const { x, y } = calculateCoords(e);
         const [piece, rank, file] = e.dataTransfer.getData('text').split(',');
 
-        console.log(x)
-        console.log(y)
-        console.log(rank)
-        console.log(7-file)
-
-        console.log(getAlgebraicNotation(rank, 7 - file))
-        console.log(getAlgebraicNotation(x, y))
-
-        console.log(reverseAlgebraicNotation('d2d4'))
-
         if (currentPosition[x][y] && !currentPosition[x][y].startsWith(piece[0])){
             const pieces = [...appState.capturedPieces, currentPosition[x][y]]
             dispatch(capturedPiece(pieces))
@@ -72,14 +62,8 @@ const Pieces = () => {
                 updateCastlingState(piece, rank, file)
             }
             const newPosition = arbiter.performMove(currentPosition, piece, rank, file, x, y);
-            /*fetch(`/move/${getAlgebraicNotation(rank, 7 - file)}${getAlgebraicNotation(x, y)}`).then((res) =>
-                res.json().then((data) => {
-                    //deal with ai move
-                    let coords = reverseAlgebraicNotation(data.move)
-                })
-            )*/
             dispatch(makeMove({ newPosition }));
-            
+
             if (arbiter.isCheckmate(newPosition, currentPlayer, castleDirection)) {
                 dispatch(checkmate(piece[0]))
             } else if (arbiter.isStalemate(newPosition, currentPlayer, castleDirection)) {
@@ -89,8 +73,20 @@ const Pieces = () => {
             } else if (arbiter.threefoldRepetition(appState.position)) {
                 dispatch(detectThreefoldRepetition())
             }
-        }
 
+            let aiMove = null
+
+            fetch(`http://127.0.0.1:5000/move/${getAlgebraicNotation(rank, 7 - file)}${getAlgebraicNotation(x, y)}`).then((res) =>
+                res.json().then((data) => {
+                    aiMove = data;
+                    aiMove = reverseAlgebraicNotation(aiMove)
+                    console.log('here')
+                    const posAfterAI = arbiter.performMove(newPosition, newPosition[aiMove.from.rank][aiMove.from.file], aiMove.from.rank, aiMove.from.file, aiMove.to.rank, aiMove.to.file)
+                    dispatch(makeMove({ posAfterAI }))
+                    console.log('here2')
+                })
+            )
+        }
         dispatch(clearLegalMoves())
     }
 
