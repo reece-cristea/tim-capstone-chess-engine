@@ -63,3 +63,18 @@ export const findPieceCoords = (position, piece) => {
     })
     return results
 }
+
+export const getAlgebraicNotation = (x, y) => {
+    let files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+    let rank = Number(x) + 1
+    let file = files[y]
+    return `${file}${rank}`
+}
+
+export const reverseAlgebraicNotation = (str) => {
+    let squares = [str.substr(0,str.length / 2), str.substr(str.length / 2,str.length)]
+    let files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+    let from = { rank: Number(squares[0][1]) - 1, file: files.indexOf(squares[0][0])}
+    let to = { rank: Number(squares[1][1]) - 1, file: files.indexOf(squares[1][0])}
+    return {from: from, to: to}
+}

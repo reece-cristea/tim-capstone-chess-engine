@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react'
 import Piece from '../Piece/piece'
 import './pieces.css'
-import { createPositions, copyPosition } from '../../helper'
+import { createPositions, copyPosition, getAlgebraicNotation, reverseAlgebraicNotation } from '../../helper'
 import { useAppContext } from '../../contexts/context'
 import { makeMove } from '../../reducer/actions/move'
 import { clearLegalMoves } from '../../reducer/actions/clearLegalMoves'
@@ -36,7 +36,7 @@ const Pieces = () => {
     }
 
     const updateCastlingState = (piece, rank, file) => {
-        const direction = getCastlingDirections(appState.castleDirection,piece, Number(rank), 7 - Number(file))
+        const direction = getCastlingDirections(appState.castleDirection, piece, Number(rank), 7 - Number(file))
         if (direction) {
             dispatch(updateCastling(direction))
         }
@@ -46,7 +46,7 @@ const Pieces = () => {
         const { x, y } = calculateCoords(e);
         const [piece, rank, file] = e.dataTransfer.getData('text').split(',');
 
-        if (currentPosition[x][y] && !currentPosition[x][y].startsWith(piece[0])){
+        if (currentPosition[x][y] && !currentPosition[x][y].startsWith(piece[0])) {
             const pieces = [...appState.capturedPieces, currentPosition[x][y]]
             dispatch(capturedPiece(pieces))
         }
@@ -54,7 +54,7 @@ const Pieces = () => {
         if (appState.legalMoves.find(sq => sq[0] === x && sq[1] === y)) {
             const currentPlayer = piece.startsWith('w') ? 'b' : 'w';
             const castleDirection = appState.castleDirection[`${piece.startsWith('w') ? 'b' : 'w'}`];
-            if ((piece === 'wp' && x === 7) || (piece === 'bp' && x === 0)){
+            if ((piece === 'wp' && x === 7) || (piece === 'bp' && x === 0)) {
                 openPromotionBox(rank, file, x, y)
                 return
             }
@@ -63,7 +63,6 @@ const Pieces = () => {
             }
             const newPosition = arbiter.performMove(currentPosition, piece, rank, file, x, y);
             dispatch(makeMove({ newPosition }));
-            
             if (arbiter.isCheckmate(newPosition, currentPlayer, castleDirection)) {
                 dispatch(checkmate(piece[0]))
             } else if (arbiter.isStalemate(newPosition, currentPlayer, castleDirection)) {
@@ -73,15 +72,58 @@ const Pieces = () => {
             } else if (arbiter.threefoldRepetition(appState.position)) {
                 dispatch(detectThreefoldRepetition())
             }
+            dispatch(clearLegalMoves())
+            return `${getAlgebraicNotation(rank, 7 - file)}${getAlgebraicNotation(x, y)}`
         }
-
         dispatch(clearLegalMoves())
+        return null
+    }
+
+    const aiMove = async (move) => {
+        let aiMove = null
+        await fetch(`http://127.0.0.1:5000/move/${move}`).then((res) =>
+            res.json().then((data) => {
+                aiMove = data;
+                aiMove = reverseAlgebraicNotation(aiMove)
+                console.log(aiMove)
+                
+                /*
+                if (currentPosition[aiMove.to.rank][7 - aiMove.to.file] && !currentPosition[aiMove.to.rank][7 - aiMove.to.file].startsWith(currentPosition[aiMove.from.rank][aiMove.from.file][0])) {
+                    const pieces = [...appState.capturedPieces, currentPosition[aiMove.to.rank][7 - aiMove.to.file]]
+                    dispatch(capturedPiece(pieces))
+                }
+
+                const aiPlayer = currentPosition[aiMove.from.rank][aiMove.from.file].startsWith('w') ? 'b' : 'w';
+                const aiCastleDirection = appState.castleDirection[`${currentPosition[aiMove.from.rank][aiMove.from.file].startsWith('w') ? 'b' : 'w'}`];
+                if (currentPosition[aiMove.from.rank][aiMove.from.file].endsWith('r') || currentPosition[aiMove.from.rank][aiMove.from.file].endsWith('k')) {
+                    updateCastlingState(currentPosition[aiMove.from.rank][aiMove.from.file], aiMove.from.rank, aiMove.from.file)
+                }
+
+                const posAfterAI = arbiter.performMove(currentPosition, currentPosition[aiMove.from.rank][aiMove.from.file], aiMove.from.rank, aiMove.from.file, aiMove.to.rank, 7 - aiMove.to.file)
+                dispatch(makeMove({ posAfterAI }))
+
+                if (arbiter.isCheckmate(posAfterAI, aiPlayer, aiCastleDirection)) {
+                    dispatch(checkmate(currentPosition[aiMove.from.rank][aiMove.from.file][0]))
+                } else if (arbiter.isStalemate(posAfterAI, aiPlayer, aiCastleDirection)) {
+                    dispatch(stalemate())
+                } else if (arbiter.insufficientMaterials(posAfterAI)) {
+                    dispatch(detectInsufficientMaterials())
+                } else if (arbiter.threefoldRepetition(appState.position)) {
+                    dispatch(detectThreefoldRepetition())
+                }*/
+            })
+            
+        )
+        return aiMove
     }
 
     const onDrop = e => {
-       e.preventDefault()
-       move(e)
-       console.log(appState)
+        e.preventDefault()
+        let playerMove = move(e)
+        if (appState.turn === 'w') {
+            let am = aiMove(playerMove)
+            console.log(am)
+        }
     }
 
     const onDragOver = e => {
