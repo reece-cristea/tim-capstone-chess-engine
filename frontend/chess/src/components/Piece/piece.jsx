@@ -26,7 +26,7 @@ const Piece = ({rank, file, piece}) => {
   }
 
   return (
-    <div className={`piece ${piece} p-${rank}${file}`} draggable={true} onDragStart={onDragStart} onDragEnd={onDragEnd}/>
+    <div className={`piece ${piece} p-${rank}${file}`} id={`p${rank}${file}`} draggable={true} onDragStart={onDragStart} onDragEnd={onDragEnd}/>
   )
 }
 

@@ -62,6 +62,7 @@ const Pieces = () => {
                 updateCastlingState(piece, rank, file)
             }
             const newPosition = arbiter.performMove(currentPosition, piece, rank, file, x, y);
+            console.log(newPosition)
             dispatch(makeMove({ newPosition }));
             if (arbiter.isCheckmate(newPosition, currentPlayer, castleDirection)) {
                 dispatch(checkmate(piece[0]))
@@ -73,66 +74,72 @@ const Pieces = () => {
                 dispatch(detectThreefoldRepetition())
             }
             dispatch(clearLegalMoves())
-            return `${getAlgebraicNotation(rank, 7 - file)}${getAlgebraicNotation(x, y)}`
+            return [`${getAlgebraicNotation(rank, 7 - file)}${getAlgebraicNotation(x, y)}`, newPosition]
         }
         dispatch(clearLegalMoves())
         return null
     }
 
-    const aiMove = async (move) => {
+    const aiMove = async (move, newPosition) => {
         let aiMove = null
         await fetch(`http://127.0.0.1:5000/move/${move}`).then((res) =>
             res.json().then((data) => {
                 aiMove = data;
                 aiMove = reverseAlgebraicNotation(aiMove)
-                console.log(aiMove)
-                
-                /*
-                if (currentPosition[aiMove.to.rank][7 - aiMove.to.file] && !currentPosition[aiMove.to.rank][7 - aiMove.to.file].startsWith(currentPosition[aiMove.from.rank][aiMove.from.file][0])) {
-                    const pieces = [...appState.capturedPieces, currentPosition[aiMove.to.rank][7 - aiMove.to.file]]
+                if (newPosition[aiMove.to.rank][7 - aiMove.to.file] && !newPosition[aiMove.to.rank][7 - aiMove.to.file].startsWith(newPosition[aiMove.from.rank][aiMove.from.file][0])) {
+                    const pieces = [...appState.capturedPieces, newPosition[aiMove.to.rank][7 - aiMove.to.file]]
                     dispatch(capturedPiece(pieces))
                 }
 
-                const aiPlayer = currentPosition[aiMove.from.rank][aiMove.from.file].startsWith('w') ? 'b' : 'w';
-                const aiCastleDirection = appState.castleDirection[`${currentPosition[aiMove.from.rank][aiMove.from.file].startsWith('w') ? 'b' : 'w'}`];
-                if (currentPosition[aiMove.from.rank][aiMove.from.file].endsWith('r') || currentPosition[aiMove.from.rank][aiMove.from.file].endsWith('k')) {
-                    updateCastlingState(currentPosition[aiMove.from.rank][aiMove.from.file], aiMove.from.rank, aiMove.from.file)
+                const aiPlayer = newPosition[aiMove.from.rank][aiMove.from.file].startsWith('w') ? 'b' : 'w';
+                const aiCastleDirection = appState.castleDirection[`${newPosition[aiMove.from.rank][aiMove.from.file].startsWith('w') ? 'b' : 'w'}`];
+                if (newPosition[aiMove.from.rank][aiMove.from.file].endsWith('r') || newPosition[aiMove.from.rank][aiMove.from.file].endsWith('k')) {
+                    updateCastlingState(newPosition[aiMove.from.rank][aiMove.from.file], aiMove.from.rank, aiMove.from.file)
                 }
 
-                const posAfterAI = arbiter.performMove(currentPosition, currentPosition[aiMove.from.rank][aiMove.from.file], aiMove.from.rank, aiMove.from.file, aiMove.to.rank, 7 - aiMove.to.file)
-                dispatch(makeMove({ posAfterAI }))
+                const posAfterAI = arbiter.performMove(newPosition, newPosition[aiMove.from.rank][aiMove.from.file], aiMove.from.rank, aiMove.from.file, aiMove.to.rank, 7 - aiMove.to.file)
+                console.log(posAfterAI)
+                dispatch(makeMove({newPosition: posAfterAI}))
 
                 if (arbiter.isCheckmate(posAfterAI, aiPlayer, aiCastleDirection)) {
-                    dispatch(checkmate(currentPosition[aiMove.from.rank][aiMove.from.file][0]))
+                    dispatch(checkmate(newPosition[aiMove.from.rank][aiMove.from.file][0]))
                 } else if (arbiter.isStalemate(posAfterAI, aiPlayer, aiCastleDirection)) {
                     dispatch(stalemate())
                 } else if (arbiter.insufficientMaterials(posAfterAI)) {
                     dispatch(detectInsufficientMaterials())
                 } else if (arbiter.threefoldRepetition(appState.position)) {
                     dispatch(detectThreefoldRepetition())
-                }*/
+                }
+
             })
-            
         )
+
+
         return aiMove
     }
 
     const onDrop = e => {
         e.preventDefault()
         let playerMove = move(e)
-        if (appState.turn === 'w') {
-            let am = aiMove(playerMove)
-            console.log(am)
-        }
+        aiMove(playerMove[0], playerMove[1])
     }
 
     const onDragOver = e => {
         e.preventDefault();
     }
 
+    const simulateDragAndDrop = (aiMove) => {
+        const draggablePiece = document.getElementById(`p${aiMove.from.rank}${aiMove.from.file}`)
+        const dropTile = document.getElementById(`${aiMove.to.rank}${aiMove.to.file}`)
+        const dragStartEvent = new Event('dragstart', { bubbles: true })
+        draggablePiece.dispatchEvent(dragStartEvent)
+        const dropEvent = new Event('drop', { bubbles: true })
+        dropTile.dispatchEvent(dropEvent)
+    }
+
     return (
         <div className='pieces' onDrop={onDrop} onDragOver={onDragOver} ref={ref}>
-            {currentPosition.map((r, rank) =>
+            {currentPosition?.map((r, rank) =>
                 r.map((f, file) =>
                     currentPosition[rank][file] ? <Piece rank={rank} file={file} piece={currentPosition[rank][file]} key={`${rank}-${file}`} /> : null
                 ))}

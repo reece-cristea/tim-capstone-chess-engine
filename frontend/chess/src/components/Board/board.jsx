@@ -16,28 +16,31 @@ const Board = () => {
     const ranks = Array(8).fill().map((x, i) => 8 - i);
     const files = Array(8).fill().map((x, i) => i + 1);
 
-    const {appState} = useAppContext();
+    const { appState } = useAppContext();
     const position = appState.position[appState.position.length - 1];
 
     const isChecked = (() => {
-        const isInCheck = arbiter.isPlayerInCheck({
-            positionAfterMove: position,
-            player: appState.turn
-        })
-        if (isInCheck) {
-            return getKingPosition(position, appState.turn);
+        if (position) {
+            const isInCheck = arbiter.isPlayerInCheck({
+                positionAfterMove: position,
+                player: appState.turn
+            })
+            if (isInCheck) {
+                return getKingPosition(position, appState.turn);
+            }
+            return null
         }
-        return null
+
     })()
 
     const getTileColor = (i, j) => {
         let c = 'tile'
         c += (i + j) % 2 === 0 ? ' tile--dark ' : ' tile--light '
         if (appState.legalMoves?.find(sq => sq[0] === i && sq[1] === j)) {
-            if(position[i][j] === ""){
+            if (position[i][j] === "") {
                 c += ' empty';
             } else {
-                c+= ' attack';
+                c += ' attack';
             }
         }
         if (isChecked && isChecked[0] === i && isChecked[1] === j)
@@ -50,21 +53,21 @@ const Board = () => {
         <div className='board'>
 
             <Ranks ranks={ranks} />
-            
+
             <div className='tiles'>
                 {ranks.map((rank, i) =>
                     files.map((file, j) =>
-                        <div key={rank + "-" + file} className={getTileColor(7-i, j)}></div>
+                        <div key={rank + "-" + file} className={getTileColor(7 - i, j)} id={`${rank}${file}`}></div>
                     )
-                )}    
+                )}
             </div>
-            
+
             <Pieces />
             <PopUp>
                 <Promotion />
                 <GameEnds />
             </PopUp>
-            
+
             <Files files={files} />
         </div>
     )
