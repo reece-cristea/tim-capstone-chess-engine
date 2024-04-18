@@ -7,7 +7,6 @@ export const reducer = (state, action) => {
             let { turn, position } = state
             turn = turn === 'w' ? 'b' : 'w';
             position = [...position, action.payload.newPosition]
-            console.log(position)
             return {
                 ...state,
                 turn,
