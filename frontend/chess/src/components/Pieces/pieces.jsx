@@ -14,6 +14,7 @@ import { detectInsufficientMaterials } from '../../reducer/actions/insufficientM
 import { detectThreefoldRepetition } from '../../reducer/actions/threefold'
 import { checkmate } from '../../reducer/actions/checkmate'
 import { capturedPiece } from '../../reducer/actions/capture'
+import { clearPromotionMove } from '../../reducer/actions/clearPromotionMove'
 
 
 const Pieces = () => {
@@ -45,27 +46,24 @@ const Pieces = () => {
     const move = e => {
         const { x, y } = calculateCoords(e);
         const [piece, rank, file] = e.dataTransfer.getData('text').split(',');
-
-        if (currentPosition[x][y] && !currentPosition[x][y].startsWith(piece[0])) {
-            const pieces = [...appState.capturedPieces, currentPosition[x][y]]
-            dispatch(capturedPiece(pieces))
-        }
+        let promotion = false
 
         if (appState.legalMoves.find(sq => sq[0] === x && sq[1] === y)) {
             const currentPlayer = piece.startsWith('w') ? 'b' : 'w';
             const castleDirection = appState.castleDirection[`${piece.startsWith('w') ? 'b' : 'w'}`];
+            if (currentPosition[x][y] && !currentPosition[x][y].startsWith(piece[0])) {
+                const pieces = [...appState.capturedPieces, currentPosition[x][y]]
+                dispatch(capturedPiece(pieces))
+            }
+
             if ((piece === 'wp' && x === 7) || (piece === 'bp' && x === 0)) {
                 openPromotionBox(rank, file, x, y)
+                promotion = true
             }
             if (piece.endsWith('r') || piece.endsWith('k')) {
                 updateCastlingState(piece, rank, file)
             }
-            console.log(currentPosition)
-            console.log(piece)
-            console.log(rank)
-            console.log(file)
-            console.log(x)
-            console.log(y)
+
             const newPosition = arbiter.performMove(currentPosition, piece, rank, file, x, y);
             dispatch(makeMove({ newPosition }));
             if (arbiter.isCheckmate(newPosition, currentPlayer, castleDirection)) {
@@ -78,6 +76,9 @@ const Pieces = () => {
                 dispatch(detectThreefoldRepetition())
             }
             dispatch(clearLegalMoves())
+            if (promotion === true) {
+                return null
+            }
             return [`${getAlgebraicNotation(rank, 7 - file)}${getAlgebraicNotation(x, y)}`, newPosition]
         }
         dispatch(clearLegalMoves())
@@ -95,6 +96,7 @@ const Pieces = () => {
                 console.log(aiMove.from.file)
                 console.log(aiMove.to.rank)
                 console.log(aiMove.to.file)
+                console.log(appState.status)
 
                 if (newPosition[aiMove.to.rank][aiMove.to.file] && !newPosition[aiMove.to.rank][aiMove.to.file].startsWith(newPosition[aiMove.from.rank][aiMove.from.file][0])) {
                     const pieces = [...appState.capturedPieces, newPosition[aiMove.to.rank][aiMove.to.file]]
@@ -111,7 +113,7 @@ const Pieces = () => {
                 if ((aiMove.from.rank === 7 && aiMove.from.file === 4) && (aiMove.to.rank === 7 && aiMove.to.file === 7)) {
                     posAfterAI = arbiter.performMove(newPosition, newPosition[aiMove.from.rank][aiMove.from.file], aiMove.from.rank, 7 - aiMove.from.file, aiMove.to.rank, 6)
                     dispatch(makeMove({ newPosition: posAfterAI }))
-                } else if ((aiMove.from.rank === 7 && aiMove.from.file === 4) && (aiMove.to.rank === 7 && aiMove.to.file === 0)){
+                } else if ((aiMove.from.rank === 7 && aiMove.from.file === 4) && (aiMove.to.rank === 7 && aiMove.to.file === 0)) {
                     posAfterAI = arbiter.performMove(newPosition, newPosition[aiMove.from.rank][aiMove.from.file], aiMove.from.rank, 7 - aiMove.from.file, aiMove.to.rank, 2)
                     dispatch(makeMove({ newPosition: posAfterAI }))
                 } else {
@@ -143,6 +145,13 @@ const Pieces = () => {
 
     const onDragOver = e => {
         e.preventDefault();
+    }
+
+    if (appState.promotionMove) {
+        if (appState.turn === 'w') {
+            aiMove(appState.promotionMove, appState.position[appState.position.length - 1])
+            dispatch(clearPromotionMove())
+        }
     }
 
     return (

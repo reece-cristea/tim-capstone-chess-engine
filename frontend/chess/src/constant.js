@@ -20,5 +20,6 @@ export const initGame = {
         w: 'both',
         b: 'both'
     },
-    capturedPieces: []
+    capturedPieces : [],
+    promotionMove: null
 }

@@ -1,9 +1,10 @@
 import React from 'react'
 import './promotion.css'
 import { useAppContext } from '../../../contexts/context';
-import { copyPosition } from '../../../helper';
+import { copyPosition, getAlgebraicNotation } from '../../../helper';
 import { clearLegalMoves } from '../../../reducer/actions/clearLegalMoves';
 import { makeMove } from '../../../reducer/actions/move';
+import { setPromotingPiece } from '../../../reducer/actions/setPromotion';
 
 const Promotion = ({onClosePopUp}) => {
     const options = ['q', 'r', 'b', 'n'];
@@ -37,8 +38,10 @@ const Promotion = ({onClosePopUp}) => {
         const newPosition = copyPosition(appState.position[appState.position.length - 1]);
         newPosition[promotionSquare.rank][7 - promotionSquare.file] = '';
         newPosition[promotionSquare.x][promotionSquare.y] = `${color}${option}`;
+        dispatch(setPromotingPiece(`${getAlgebraicNotation(promotionSquare.rank, 7 - promotionSquare.file)}${getAlgebraicNotation(promotionSquare.x, promotionSquare.y)}${option}`))
         dispatch(clearLegalMoves());
         dispatch(makeMove({ newPosition }));
+        
     }
 
   return (
