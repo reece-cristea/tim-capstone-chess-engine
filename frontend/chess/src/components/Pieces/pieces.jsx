@@ -46,7 +46,6 @@ const Pieces = () => {
     const move = e => {
         const { x, y } = calculateCoords(e);
         const [piece, rank, file] = e.dataTransfer.getData('text').split(',');
-        let promotion = false
 
         if (appState.legalMoves.find(sq => sq[0] === x && sq[1] === y)) {
             const currentPlayer = piece.startsWith('w') ? 'b' : 'w';
@@ -58,7 +57,7 @@ const Pieces = () => {
 
             if ((piece === 'wp' && x === 7) || (piece === 'bp' && x === 0)) {
                 openPromotionBox(rank, file, x, y)
-                promotion = true
+                return null
             }
             if (piece.endsWith('r') || piece.endsWith('k')) {
                 updateCastlingState(piece, rank, file)
@@ -68,17 +67,18 @@ const Pieces = () => {
             dispatch(makeMove({ newPosition }));
             if (arbiter.isCheckmate(newPosition, currentPlayer, castleDirection)) {
                 dispatch(checkmate(piece[0]))
+                return null
             } else if (arbiter.isStalemate(newPosition, currentPlayer, castleDirection)) {
                 dispatch(stalemate())
+                return null
             } else if (arbiter.insufficientMaterials(newPosition)) {
                 dispatch(detectInsufficientMaterials())
+                return null
             } else if (arbiter.threefoldRepetition(appState.position)) {
                 dispatch(detectThreefoldRepetition())
-            }
-            dispatch(clearLegalMoves())
-            if (promotion === true) {
                 return null
             }
+            dispatch(clearLegalMoves())
             return [`${getAlgebraicNotation(rank, 7 - file)}${getAlgebraicNotation(x, y)}`, newPosition]
         }
         dispatch(clearLegalMoves())
@@ -145,13 +145,6 @@ const Pieces = () => {
 
     const onDragOver = e => {
         e.preventDefault();
-    }
-
-    if (appState.promotionMove) {
-        if (appState.turn === 'w') {
-            aiMove(appState.promotionMove, appState.position[appState.position.length - 1])
-            dispatch(clearPromotionMove())
-        }
     }
 
     return (
