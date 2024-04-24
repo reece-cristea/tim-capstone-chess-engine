@@ -6,6 +6,7 @@ import AppContext from './contexts/context';
 import { reducer } from './reducer/reducer';
 import { initGame } from './constant';
 import CapturedPieces from './components/CapturedPieces/capturedPieces';
+import { setupNewGame } from './reducer/actions/newGame';
 
 function App() {
 
@@ -16,6 +17,11 @@ function App() {
     dispatch
   }
 
+  const newGame = async () => {
+    dispatch(setupNewGame());
+    await fetch(`http://127.0.0.1:5000/reset`)
+}
+
   return (
     <AppContext.Provider value={providerState} >
       <div className="App">
@@ -23,6 +29,7 @@ function App() {
         <Board />
         <CapturedPieces color={'b'}/>
       </div>
+      <button onClick={(e)=> newGame()}>Reset</button>
     </AppContext.Provider>
   );
 }
