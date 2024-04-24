@@ -13,8 +13,9 @@ const GameEnds = ({ onClosePopUp }) => {
 
     const isWin = status.endsWith("wins!")
 
-    const newGame = () => {
+    const newGame = async () => {
         dispatch(setupNewGame());
+        await fetch(`http://127.0.0.1:5000/reset`)
     }
 
     return (

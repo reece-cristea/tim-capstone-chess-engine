@@ -82,6 +82,18 @@ export const reducer = (state, action) => {
                 capturedPieces: action.payload
             }
         }
+        case actionTypes.SETTING_PROMOTION_PIECE: {
+            return {
+                ...state,
+                promotionMove: action.payload
+            }
+        }
+        case actionTypes.CLEAR_PROMOTION_MOVE: {
+            return {
+                ...state,
+                promotionMove: null
+            }
+        }
         default:
             return state;
     }

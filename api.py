@@ -8,6 +8,12 @@ CORS(app)
 
 game = ChessGame()
 
+@app.route('/reset')
+def reset():
+    game.resetGame()
+    print(game.board)
+    return json.dumps({ "error" : 0})
+
 @app.route('/move/<algebraic_move>')
 def move(algebraic_move):
     player_move = game.make_move(algebraic_move)
