@@ -20,16 +20,19 @@ function App() {
   const newGame = async () => {
     dispatch(setupNewGame());
     await fetch(`http://127.0.0.1:5000/reset`)
-}
+  }
 
   return (
     <AppContext.Provider value={providerState} >
-      <div className="App">
-        <CapturedPieces color={'w'}/>
-        <Board />
-        <CapturedPieces color={'b'}/>
+      <div className='content'>
+        <div className="App">
+          <CapturedPieces color={'w'} />
+          <Board />
+          <CapturedPieces color={'b'} />
+        </div>
+        <button className="reset-button" onClick={(e) => newGame()}>Reset</button>
       </div>
-      <button onClick={(e)=> newGame()}>Reset</button>
+
     </AppContext.Provider>
   );
 }
