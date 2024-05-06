@@ -1,6 +1,6 @@
 import keras
-from keras.models import Sequential
-from keras.layers import Dense, Activation
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Activation
 
 def create_model():
     coreFeatures = 8 * 8 *6
