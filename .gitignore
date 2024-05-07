@@ -1,5 +1,3 @@
 .git
 __pycache__
-my_trained_chess_ai.h5
-my_trained_chess_ai.json
 DATABASE4U.pgn
