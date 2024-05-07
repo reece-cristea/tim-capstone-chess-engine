@@ -6,6 +6,7 @@ from flask_cors import CORS
 
 
 app = Flask(__name__, static_folder='frontend/chess/build')
+CORS(app)
 
 # Serve React App
 @app.route('/', defaults={'path': ''})
@@ -15,7 +16,7 @@ def serve(path):
         return send_from_directory(app.static_folder, path)
     else:
         return send_from_directory(app.static_folder, 'index.html')
-CORS(app)
+
 
 game = ChessGame()
 
@@ -36,4 +37,4 @@ def move(algebraic_move):
     return json.dumps(ai_move)
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', use_reloader=False, port=5000, threaded=True)
+    app.run(host='0.0.0.0', use_reloader=False, port=8000, threaded=True)
