@@ -50,7 +50,7 @@ const Promotion = ({ onClosePopUp }) => {
 
     const aiMove = async (move, newPosition) => {
         let aiMove = null
-        await fetch(`http://172.26.6.187:8000/move/${move}`).then((res) =>
+        await fetch(`http://localhost:8000/move/${move}`).then((res) =>
             res.json().then((data) => {
                 aiMove = data;
                 aiMove = reverseAlgebraicNotation(aiMove)

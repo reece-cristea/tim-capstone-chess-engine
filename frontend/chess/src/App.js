@@ -19,7 +19,7 @@ function App() {
 
   const newGame = async () => {
     dispatch(setupNewGame());
-    await fetch(`http://127.0.0.1:5000/reset`)
+    await fetch(`http://localhost:8000/reset`)
   }
 
   return (

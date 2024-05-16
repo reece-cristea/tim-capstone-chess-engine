@@ -1,0 +1,6 @@
+pip install flask
+pip install python-chess
+pip install keras
+pip install tensorflow
+pip install matplotlib
+pip install flask-cors
