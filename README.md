@@ -1,6 +1,6 @@
 # T.I.N.C.A.N. (Tactical Intelligent Neural Chess AI Network)
 
-Welcome to T.I.N.C.A.N., a chess engine designed for tactical gameplay and neural network-powered decision-making. This README will guide you through the process of downloading and using T.I.N.C.A.N.
+Welcome to T.I.N.C.A.N., a chess engine designed for tactical gameplay and neural network-powered decision-making. This README will guide you through the process of downloading and using T.I.N.C.A.N. for a Windows machine.
 
 ## Prerequisites
 
