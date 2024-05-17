@@ -49,4 +49,3 @@ Before you begin, ensure you have the following installed on your system:
 If you encounter any errors or have questions, please feel free to contact the developer at [rcinlae36@gmail.com](mailto:rcinlae36@gmail.com).
 
 Thank you for checking out T.I.N.C.A.N.! Enjoy playing chess with our tactical AI engine. 🚀🔥
-```
